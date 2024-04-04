@@ -11,7 +11,11 @@
 		"forceConsistentCasingInFileNames": true,
 		"moduleResolution": "node",
 		"removeComments": true,
-		"declarationDir": "./dist/types"
+		"declarationDir": "./dist/types",
+
+		// To avoid errors in tests
+		"emitDeclarationOnly": true,
+		"allowImportingTsExtensions": true
 	},
 	"include": ["src"],
 	"exclude": ["node_modules", "**/__tests__/*"]
