@@ -18,6 +18,14 @@ export default {
 	plugins: [
 		typescript({
 			useTsconfigDeclarationDir: true,
+			// emitDeclarationOnly: false,
+			// allowImportingTsExtensions: false,
+			tsconfigOverride: {
+				compilerOptions: {
+					emitDeclarationOnly: false,
+					allowImportingTsExtensions: false,
+				},
+			},
 		}),
 		resolve(),
 		commonjs(),
