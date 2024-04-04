@@ -30,9 +30,12 @@ export const buildJSON = <T extends JSONValue>(
 			});
 		}
 		if (deletions) {
-			deletions.forEach((index) => {
-				newArr.splice(index, 1);
-			});
+			deletions
+				.slice(0)
+				.sort((a, b) => b - a)
+				.forEach((index) => {
+					newArr.splice(index, 1);
+				});
 		}
 		if (updates) {
 			Object.entries(updates).forEach(([index, changes]) => {
