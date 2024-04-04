@@ -1,6 +1,6 @@
 {
 	"name": "@nandn/json",
-	"version": "1.0.0",
+	"version": "1.1.0",
 	"description": "This package contains the utility functions to generate changes between an old and new json object. These changes can be used to create the new json from the old json using one of the functions from the package.",
 	"author": "Nandan Reddy <nandan.reddy1133@gmail.com>",
 	"homepage": "https://github.com/NandanGit/json#readme",
