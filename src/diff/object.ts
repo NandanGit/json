@@ -3,10 +3,10 @@ import { ObjectChanges } from '../types/changes';
 import { JSONObject } from '../types/json';
 import { deepEqual, removeUndefined } from '../utils/general';
 
-export function diffObject(
-	oldObj: JSONObject,
-	newObj: JSONObject
-): ObjectChanges | null {
+export function diffObject<T extends JSONObject>(
+	oldObj: T,
+	newObj: T
+): ObjectChanges<T> | null {
 	const oldKeys = Object.keys(oldObj);
 	const newKeys = Object.keys(newObj);
 	const addedKeys = newKeys.filter((newKey) => !oldKeys.includes(newKey));
@@ -22,14 +22,16 @@ export function diffObject(
 	const additions = addedKeys.reduce((acc, key) => {
 		acc[key] = newObj[key];
 		return acc;
-	}, {} as NonNullable<ObjectChanges['additions']>);
+	}, {} as Record<string, unknown>) as NonNullable<
+		ObjectChanges<T>['additions']
+	>;
 	const deletions = deletedKeys;
-	const updates: ObjectChanges['updates'] = updatedKeys.reduce((acc, key) => {
+	const updates = updatedKeys.reduce((acc, key) => {
 		acc[key] = diff(oldObj[key], newObj[key]);
 		return acc;
-	}, {} as NonNullable<ObjectChanges['updates']>);
+	}, {} as Record<string, unknown>) as NonNullable<ObjectChanges<T>['updates']>;
 
-	return removeUndefined<ObjectChanges>({
+	return removeUndefined<ObjectChanges<T>>({
 		entity: 'obj',
 		additions: Object.keys(additions).length > 0 ? additions : undefined,
 		deletions: deletions.length > 0 ? deletions : undefined,

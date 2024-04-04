@@ -10,12 +10,15 @@ import { isJSONArray, deepClone, isJSONObject } from './utils/general';
  * @returns The new JSON
  * @summary This function takes in an old JSON and a set of changes and returns a new JSON.
  */
-export const buildJSON = (oldJSON: JSONValue, changes: Changes): JSONValue => {
+export const buildJSON = <T extends JSONValue>(
+	oldJSON: T,
+	changes: Changes
+): T => {
 	if (changes === null) {
 		return oldJSON;
 	}
 	if (typeof changes !== 'object') {
-		return changes;
+		return changes as T;
 	}
 	if (isJSONArray(oldJSON) && isArrayChanges(changes)) {
 		const { additions, deletions, updates } = changes;
@@ -53,11 +56,11 @@ export const buildJSON = (oldJSON: JSONValue, changes: Changes): JSONValue => {
 			});
 		}
 		if (updates) {
-			Object.entries(updates).forEach(([key, change]) => {
-				newObj[key] = buildJSON(oldObj[key], change);
+			Object.entries(updates).forEach(([key, changes]) => {
+				newObj[key] = buildJSON(oldObj[key], changes);
 			});
 		}
 		return newObj;
 	}
-	return changes;
+	return changes as T;
 };

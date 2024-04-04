@@ -43,10 +43,13 @@ describe('diffObject', () => {
 
 	// Case when some are modified and some are added and some are deleted
 	it('should return an object of additions, deletions, and updates for objects of similar size', () => {
+		type T = {
+			[key: string]: number;
+		};
 		const oldObj = { a: 1, b: 2, c: 3, d: 4, e: 5 };
 		const newObj = { a: 1, c: 3, d: 6, f: 7, g: 8 };
 
-		expect(diffObject(oldObj, newObj)).toEqual({
+		expect(diffObject<T>(oldObj, newObj)).toEqual({
 			entity: 'obj',
 			additions: { f: 7, g: 8 },
 			deletions: ['b', 'e'],

@@ -50,7 +50,7 @@ export function isElementOf(arr: JSONValue[], obj: JSONValue): boolean {
 	return arr.some((element) => deepEqual(element, obj));
 }
 
-export function removeUndefined<T extends JSONObject>(obj: T): T {
+export function removeUndefined<T extends Record<string, unknown>>(obj: T): T {
 	return Object.entries(obj).reduce((acc, [key, value]) => {
 		if (value !== undefined) {
 			(acc as any)[key] = value;
