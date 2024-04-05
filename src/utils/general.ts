@@ -4,10 +4,6 @@ export function deepClone<T extends JSONValue>(obj: T): T {
 	return JSON.parse(JSON.stringify(obj));
 }
 
-// export function deepEqual(obj1: JSONValue, obj2: JSONValue): boolean {
-// 	return JSON.stringify(obj1) === JSON.stringify(obj2);
-// }
-
 export function deepEqual(a: any, b: any): boolean {
 	// Check for simple primitives and references
 	if (a === b) return true;
