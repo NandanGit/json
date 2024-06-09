@@ -1,7 +1,146 @@
 import { JSONValue, JSONObject } from '../types/json';
 
-export function deepClone<T extends JSONValue>(obj: T): T {
-	return JSON.parse(JSON.stringify(obj));
+// export function deepClone<T extends JSONValue>(obj: T): T {
+// 	return JSON.parse(JSON.stringify(obj));
+// }
+
+// export function deepClone<T>(obj: T): T {
+// 	const hash = new WeakMap();
+// 	function clone<T>(obj: T): T {
+// 		if (obj instanceof Object) {
+// 			if (hash.has(obj)) return hash.get(obj);
+// 			let newObj = Array.isArray(obj) ? [] : {};
+// 			hash.set(obj, newObj);
+// 			for (let key in obj) {
+// 				if (obj.hasOwnProperty(key)) {
+// 					(newObj as any)[key] = clone((obj as any)[key]);
+// 				}
+// 			}
+// 			return newObj as any;
+// 		} else return obj;
+// 	}
+// 	return clone(obj);
+// }
+
+// export function deepClone<T>(obj: T): T {
+// 	const hash = new WeakMap();
+
+// 	function clone<T>(obj: T): T {
+// 		if (obj === null || typeof obj !== 'object') {
+// 			return obj;
+// 		}
+
+// 		if (hash.has(obj)) {
+// 			return hash.get(obj);
+// 		}
+
+// 		// Handle Date
+// 		if (obj instanceof Date) {
+// 			return new Date(obj.getTime()) as any;
+// 		}
+
+// 		// Handle RegExp
+// 		if (obj instanceof RegExp) {
+// 			return new RegExp(obj) as any;
+// 		}
+
+// 		// Handle Set
+// 		if (obj instanceof Set) {
+// 			const result = new Set();
+// 			hash.set(obj, result);
+// 			obj.forEach((value) => {
+// 				result.add(clone(value));
+// 			});
+// 			return result as any;
+// 		}
+
+// 		// Handle Map
+// 		if (obj instanceof Map) {
+// 			const result = new Map();
+// 			hash.set(obj, result);
+// 			obj.forEach((value, key) => {
+// 				result.set(key, clone(value));
+// 			});
+// 			return result as any;
+// 		}
+
+// 		// Handle Array or Object
+// 		const result = Array.isArray(obj)
+// 			? []
+// 			: Object.create(Object.getPrototypeOf(obj));
+// 		hash.set(obj, result);
+
+// 		for (const key in obj) {
+// 			if (obj.hasOwnProperty(key)) {
+// 				(result as any)[key] = clone((obj as any)[key]);
+// 			}
+// 		}
+
+// 		return result;
+// 	}
+
+// 	return clone(obj);
+// }
+
+export function deepClone<T>(obj: T): T {
+	const hash = new WeakMap();
+
+	function clone<T>(obj: T): T {
+		if (obj === null || typeof obj !== 'object') {
+			return obj;
+		}
+
+		if (hash.has(obj)) {
+			return hash.get(obj);
+		}
+
+		const result = Array.isArray(obj)
+			? []
+			: Object.create(Object.getPrototypeOf(obj));
+		hash.set(obj, result);
+
+		for (const key in obj) {
+			if (Object.prototype.hasOwnProperty.call(obj, key)) {
+				(result as any)[key] = clone((obj as any)[key]);
+			}
+		}
+
+		return result;
+	}
+
+	return clone(obj);
+}
+
+export function deepCloneWithoutUndefined<T>(obj: T): T {
+	const hash = new WeakMap();
+
+	function clone<T>(obj: T): T {
+		if (obj === null || typeof obj !== 'object') {
+			return obj;
+		}
+
+		if (hash.has(obj)) {
+			return hash.get(obj);
+		}
+
+		const result = Array.isArray(obj)
+			? []
+			: Object.create(Object.getPrototypeOf(obj));
+		hash.set(obj, result);
+
+		for (const key in obj) {
+			if (Object.prototype.hasOwnProperty.call(obj, key)) {
+				const value = (obj as any)[key];
+				if (value !== undefined) {
+					(result as any)[key] = clone(value);
+				}
+			}
+		}
+
+		return result;
+	}
+
+	return clone(obj);
 }
 
 export function deepEqual(a: any, b: any): boolean {
